@@ -2,8 +2,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-export default defineConfig({
-  base: "/my-diary-app/",
+export default defineConfig(({ mode }) => ({
+  base: mode === "production" ? "/my-diary-app/" : "/", // Use '/my-diary-app/' only in production
   plugins: [
     react(),
     VitePWA({
@@ -34,4 +34,4 @@ export default defineConfig({
       },
     }),
   ],
-});
+}));

@@ -31,26 +31,33 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-4">
-        <h1 className="text-2xl font-bold mb-4">Diary</h1>
+    <div className="min-h-screen bg-gray-50 p-6 flex justify-center items-center">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <h1 className="text-3xl font-bold mb-4 text-gray-800 text-center">
+          Diary
+        </h1>
         <textarea
-          className="w-full p-2 border border-gray-300 rounded mb-4"
+          className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Write your diary entry here..."
           value={entry}
           onChange={(e) => setEntry(e.target.value)}
-          placeholder="Write your diary entry here..."
-        ></textarea>
+        />
         <button
-          className="w-full bg-blue-500 text-white py-2 rounded"
+          className="bg-blue-500 text-white w-full py-2 rounded-lg hover:bg-blue-600 transition"
           onClick={handleAddEntry}
         >
           Add Entry
         </button>
         <div className="mt-6">
           {entries.map((e) => (
-            <div key={e.id} className="mb-2 p-2 bg-gray-200 rounded">
-              <p className="text-sm">{new Date(e.date).toLocaleString()}</p>
-              <p>{e.entry}</p>
+            <div
+              key={e.id}
+              className="mb-4 p-4 bg-gray-100 rounded-lg shadow-sm"
+            >
+              <p className="text-xs text-gray-500">
+                {new Date(e.date).toLocaleString()}
+              </p>
+              <p className="text-gray-800">{e.entry}</p>
             </div>
           ))}
         </div>
