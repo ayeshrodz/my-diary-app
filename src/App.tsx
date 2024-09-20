@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
 import { addEntry, getAllEntries } from "./db";
 
+// Define the interface for a diary entry
+interface DiaryEntry {
+  id?: number;
+  date: string;
+  entry: string;
+}
+
 function App() {
-  const [entry, setEntry] = useState("");
-  const [entries, setEntries] = useState([]);
+  // Set the type for the `entries` state to be an array of `DiaryEntry`
+  const [entry, setEntry] = useState<string>("");
+  const [entries, setEntries] = useState<DiaryEntry[]>([]);
 
   useEffect(() => {
     const fetchEntries = async () => {
