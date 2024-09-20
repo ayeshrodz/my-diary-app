@@ -32,6 +32,9 @@ export default defineConfig(({ mode }) => ({
           },
         ],
       },
+      workbox: {
+        cleanupOutdatedCaches: true, // Ensure caches are managed
+      },
     }),
   ],
 }));

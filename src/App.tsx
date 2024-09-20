@@ -12,6 +12,7 @@ function App() {
   // Set the type for the `entries` state to be an array of `DiaryEntry`
   const [entry, setEntry] = useState<string>("");
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null); // For the install prompt
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -21,12 +22,42 @@ function App() {
     fetchEntries();
   }, []);
 
+  // Handle the beforeinstallprompt event for PWA install button
+  useEffect(() => {
+    const handler = (e: any) => {
+      e.preventDefault(); // Prevent the default mini-infobar from showing
+      setDeferredPrompt(e); // Save the event for triggering the prompt later
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+
+    // Cleanup the event listener on unmount
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+    };
+  }, []);
+
+  // Function to handle the Add Entry button
   const handleAddEntry = async () => {
     if (entry.trim()) {
       await addEntry(entry);
       setEntry("");
       const allEntries = await getAllEntries();
       setEntries(allEntries);
+    }
+  };
+
+  // Function to trigger the install prompt when the install button is clicked
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt(); // Show the install prompt
+      deferredPrompt.userChoice.then((choiceResult: any) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("User accepted the install prompt");
+        } else {
+          console.log("User dismissed the install prompt");
+        }
+        setDeferredPrompt(null); // Clear the deferred prompt after use
+      });
     }
   };
 
@@ -48,6 +79,17 @@ function App() {
         >
           Add Entry
         </button>
+
+        {/* Install Button */}
+        {deferredPrompt && (
+          <button
+            className="bg-green-500 text-white w-full py-2 rounded-lg hover:bg-green-600 transition mt-4"
+            onClick={handleInstallClick}
+          >
+            Install App
+          </button>
+        )}
+
         <div className="mt-6">
           {entries.map((e) => (
             <div
